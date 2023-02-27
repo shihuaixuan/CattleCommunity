@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.twenty.cattlecommuntiy.mapper.CommentMapper">
+
+    <resultMap id="BaseResultMap" type="com.twenty.cattlecommuntiy.entity.Comment">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="entityType" column="entity_type" jdbcType="INTEGER"/>
+            <result property="entityId" column="entity_id" jdbcType="INTEGER"/>
+            <result property="targetId" column="target_id" jdbcType="INTEGER"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_id,entity_type,
+        entity_id,target_id,content,
+        status,create_time
+    </sql>
+
+    <select id="selectCommentByEntity" resultType="com.twenty.cattlecommuntiy.entity.Comment">
+        select <include refid="Base_Column_List"></include>
+        from comment
+        where status = 0
+            and entity_type = #{entityType}
+            and entity_id = #{entityId}
+        order by create_time asc
+        limit #{offset}, #{limit}
+    </select>
+    
+    <select id="selectCountByEntity" resultType="int">
+        select count(id)
+        from comment
+        where status = 0
+          and entity_type = #{entityType}
+          and entity_id = #{entityId}
+    </select>
+
+
+</mapper>
